@@ -4,22 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Login</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Vincula el archivo CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="login-container">
-        <h2>Iniciar sesión</h2>
-        <form action="#" method="post">
-            <div class="input-container">
-                <label for="username">Nombre de usuario</label>
-                <input type="text" id="username" name="username" required>
+        <div class="login-box">
+            <h2>Iniciar sesión</h2>
+            <form id="loginForm">
+                <div class="input-container">
+                    <label for="username">Nombre de usuario</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-container">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" href="inicio.html" class="btn-login">Iniciar sesión</button>
+            </form>
+            <div class="register-link">
+                <p>Aún no tienes cuenta? <a href="registro.html" class="btn-register">Registrate</a></p>
             </div>
-            <div class="input-container">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Ingresar</button>
-        </form>
+        </div>
     </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+      
+        loginForm.addEventListener('submit', async (event) => {
+          event.preventDefault();  // Prevenir que el formulario se envíe de forma tradicional
+      
+          const username = document.getElementById('username').value;
+          const password = document.getElementById('password').value;
+      
+          // Enviar datos al backend para login
+          try {
+            const response = await fetch('/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ name: username, password: password })
+            });
+      
+            const data = await response.text();
+            console.log(data); // Ver la respuesta del backend
+      
+            if (response.ok) {
+              // Si el login es exitoso, redirigir a la página en blanco
+              window.location.href = '/inicio.html';  // Puedes crear una página en blanco con este nombre
+            } else {
+              alert(data);  // Mostrar el mensaje de error que venga del backend
+            }
+          } catch (error) {
+            console.error('Error al iniciar sesión:', error);
+            alert('Hubo un error en el servidor');
+          }
+        });
+      </script>
 </body>
 </html>
