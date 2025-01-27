@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Registro</title>
-    <link rel="stylesheet" href="styleRegistro.css"> <!-- Si tienes un archivo de estilos -->
+    <link rel="stylesheet" href="styleRegistro.css">
 </head>
 <body>
     <div class="form-container">
@@ -12,14 +12,8 @@
         <form id="registerForm">
             <!-- Campo Nombre -->
             <div class="input-container">
-                <label for="firstName">Nombre</label>
-                <input type="text" id="firstName" name="firstName" required>
-            </div>
-            
-            <!-- Campo Apellido -->
-            <div class="input-container">
-                <label for="lastName">Apellido</label>
-                <input type="text" id="lastName" name="lastName" required>
+                <label for="name">Nombre</label>
+                <input type="text" id="name" required>
             </div>
             
             <!-- Campo Contraseña -->
@@ -40,22 +34,6 @@
         </form>
     </div>
 
-    <script>
-        // Script para verificar que las contraseñas coincidan
-        const registerForm = document.getElementById('registerForm');
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirmPassword');
-        const errorMessage = document.getElementById('error-message');
-
-        registerForm.addEventListener('submit', function(event) {
-            // Previene el envío del formulario si las contraseñas no coinciden
-            if (password.value !== confirmPassword.value) {
-                event.preventDefault();  // No enviar el formulario
-                errorMessage.style.display = 'inline';  // Mostrar mensaje de error
-            } else {
-                errorMessage.style.display = 'none';  // Ocultar mensaje de error si las contraseñas coinciden
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

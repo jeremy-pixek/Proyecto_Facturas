@@ -1,16 +1,17 @@
+// ControlUsuario.js
 const bcrypt = require('bcrypt');
-const { client } = require('./db');  // Importamos la conexión desde db.js
+const { client } = require('./db');  
 
 // Lógica para registrar un nuevo usuario
 async function registerUser(req, res) {
-    const { firstName, lastName, password } = req.body;  // Recibir los datos del frontend
+    const { name, password } = req.body;  // Obtener los datos del frontend (nombre y contraseña)
 
     try {
-        const database = client.db('myDataBase');
+        const database = client.db('myDataBase'); 
         const collection = database.collection('users');
 
         // Verificar si el usuario ya existe
-        const existingUser = await collection.findOne({ name: firstName + ' ' + lastName });
+        const existingUser = await collection.findOne({ name: name });
         if (existingUser) {
             return res.status(400).send('El usuario ya existe');
         }
@@ -20,8 +21,8 @@ async function registerUser(req, res) {
 
         // Crear el nuevo usuario
         const newUser = {
-            name: firstName + ' ' + lastName,
-            password: hashedPassword,
+            name: name,
+            password: hashedPassword
         };
 
         // Insertar el nuevo usuario en la base de datos
@@ -35,4 +36,5 @@ async function registerUser(req, res) {
     }
 }
 
+// Exporta la función para que pueda ser utilizada en otros archivos
 module.exports = { registerUser };
