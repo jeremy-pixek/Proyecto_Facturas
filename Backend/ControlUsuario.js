@@ -4,6 +4,7 @@ const { client } = require('./db');
 
 // Lógica para registrar un nuevo usuario
 async function registerUser(req, res) {
+
     const { name, password } = req.body;  // Obtener los datos del frontend (nombre y contraseña)
 
     try {
