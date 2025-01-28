@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulario de Login</title>
   <link rel="stylesheet" href="style.css">
+  
 </head>
 
 <body>
@@ -21,7 +22,7 @@
           <label for="password">Contraseña</label>
           <input type="password" id="password" name="password" required>
         </div>
-        <button type="submit" href="inicio.html" class="btn-login">Iniciar sesión</button>
+        <button type="submit" class="btn-login">Iniciar sesión</button>
       </form>
       <div class="register-link">
         <p>Aún no tienes cuenta? <a href="registro.html" class="btn-register">Registrate</a></p>
@@ -31,7 +32,7 @@
 
   <script>
     const loginForm = document.getElementById('loginForm');
-
+    debugger;
     loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();  // Prevenir que el formulario se envíe de forma tradicional
 
@@ -40,7 +41,8 @@
 
       // Enviar datos al backend para login
       try {
-        const response = await fetch('/login', {
+        debugger;
+        const response =  fetch('/ControlUsuario', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -49,7 +51,7 @@
         });
 
         if (response.ok) {
-          const data = await response.json();
+          const data = response.json();
           localStorage.setItem('authToken', data.token);  // Guardar el token en localStorage
           window.location.href = '/inicio.html';  // Redirigir al inicio
         } else {

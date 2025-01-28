@@ -23,7 +23,7 @@ registerForm.addEventListener('submit', async function(event) {
         password: passwordInput.value
     };
 
-    try {
+    
         // Enviar datos al servidor usando fetch
         const response = await fetch('/backend/ControlUsuario', {
             method: 'POST',  // Método POST
@@ -34,16 +34,18 @@ registerForm.addEventListener('submit', async function(event) {
         });
 
         // Manejar la respuesta del servidor
-        const responseData = await response.json();
 
+       
+        const responseData =  response.json();
+        var e =response.ok;
+        var t = response.error;// esto tampoco
+
+        var  r =  responseData.error;// no funciona esto te va a dar un error 
+
+        console.log(response);
         if (response.ok) {
             alert('Usuario registrado exitosamente');
             // Redirigir a otra página o limpiar el formulario
-        } else {
-            alert(responseData.error || 'Hubo un problema al registrar el usuario');
         }
-    } catch (error) {
-        console.error('Error al enviar los datos:', error);
-        alert('Hubo un problema al registrar el usuario.');
-    }
+    
 });

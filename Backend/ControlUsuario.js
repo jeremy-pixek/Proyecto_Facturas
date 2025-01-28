@@ -1,9 +1,10 @@
 // ControlUsuario.js
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const { client } = require('./db');  
 
-// Lógica para registrar un nuevo usuario
+//******************************************* Registrar usuario ******************************************************** */
 async function registerUser(req, res) {
 
     const { name, password } = req.body;  // Obtener los datos del frontend (nombre y contraseña)
@@ -29,10 +30,15 @@ async function registerUser(req, res) {
 
         // Insertar el nuevo usuario en la base de datos
         await collection.insertOne(newUser);
-        console.log('Nuevo usuario registrado');
-
-        res.status(201).send('Usuario registrado exitosamente');
+        document.getElementById('btnRegistrar').addEventListener('click', function(e) {
+            Notiflix.Notify.success('¡Creación de usuario exitosa!', {
+              position: 'center-top', 
+              timeout: 3000, 
+              width: '300px', 
+            });
+          });
     } catch (error) {
+
         console.error('Error al registrar usuario:', error);
         res.status(500).send('Hubo un error al registrar el usuario');
     }
@@ -40,6 +46,10 @@ async function registerUser(req, res) {
 
 // Exporta la función para que pueda ser utilizada en otros archivos
 module.exports = { registerUser };
+
+
+//****************************************************** Inicio de sesion **************************************************************** */
+
 
 async function loginUser(req, res) {
     const { name, password } = req.body;  // Obtener los datos del frontend (nombre y contraseña)
@@ -49,7 +59,7 @@ async function loginUser(req, res) {
         const collection = database.collection('users');
 
         // Verificar si el usuario existe
-        const user = await collection.findOne({ name: name });
+        const user =  collection.findOne({ name: name });
         if (!user) {
             return res.status(400).send('Usuario o contraseña incorrectos');
         }
@@ -62,18 +72,17 @@ async function loginUser(req, res) {
 
         // Generar un JWT para la sesión
         const token = jwt.sign(
-            { userId: user._id, username: user.name }, // Datos que se incluirán en el token
-            'tu_clave_secreta',  // Clave secreta para firmar el token (esto debe ser algo seguro y no se debe exponer)
-            { expiresIn: '1h' }  // Expiración del token (1 hora en este caso)
+            {  username: user.name }, // Datos que se incluirán en el token
+            process.env.SESSION_SECRET,  
+            { expiresIn: '2h' }  
         );
 
         // Devolver el token al cliente
         res.status(200).json({ message: 'Inicio de sesión exitoso', token: token });
     } catch (error) {
-        console.error('Error al iniciar sesión:', error);
+        console.log('Error al iniciar sesión:', error);
         res.status(500).send('Hubo un error al iniciar sesión');
     }
 }
 
-// Exportar las funciones para que puedan ser utilizadas en otros archivos
 module.exports = { registerUser, loginUser };

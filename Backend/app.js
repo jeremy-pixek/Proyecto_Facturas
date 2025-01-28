@@ -26,6 +26,9 @@ connectDB();
 
 // Ruta para registrar un usuario
 app.post('/backend/ControlUsuario', ControlUsuario.registerUser);  // Usamos el controlador para manejar el registro
+app.post('/backend/login', ControlUsuario.loginUser);
+
+
 
 // Ruta para iniciar sesión y crear la sesión
 app.post('/login', (req, res) => {
@@ -56,7 +59,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Enviar el archivo "index.html" si no se encuentra la ruta específica
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
 // Iniciar el servidor
