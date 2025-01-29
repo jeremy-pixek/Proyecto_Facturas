@@ -25,8 +25,9 @@ app.use(session({
 connectDB();
 
 // Ruta para registrar un usuario
-app.post('/backend/ControlUsuario', ControlUsuario.registerUser);  // Usamos el controlador para manejar el registro
-app.post('/backend/login', ControlUsuario.loginUser);
+app.post('/backend/registro', ControlUsuario.registerUser);  // Usamos el controlador para manejar el registro
+app.post('/backend/login', ControlUsuario.loginUser); // este es el url que deberias consumir.
+
 
 
 

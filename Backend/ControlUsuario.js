@@ -30,13 +30,9 @@ async function registerUser(req, res) {
 
         // Insertar el nuevo usuario en la base de datos
         await collection.insertOne(newUser);
-        document.getElementById('btnRegistrar').addEventListener('click', function(e) {
-            Notiflix.Notify.success('¡Creación de usuario exitosa!', {
-              position: 'center-top', 
-              timeout: 3000, 
-              width: '300px', 
-            });
-          });
+        console.log('Nuevo usuario registrado');
+
+        res.status(201).send('Usuario registrado exitosamente');
     } catch (error) {
 
         console.error('Error al registrar usuario:', error);
@@ -59,20 +55,29 @@ async function loginUser(req, res) {
         const collection = database.collection('users');
 
         // Verificar si el usuario existe
-        const user =  collection.findOne({ name: name });
+        const user = await collection.findOne({ name: name });  // Asegúrate de esperar la respuesta de la base de datos
         if (!user) {
-            return res.status(400).send('Usuario o contraseña incorrectos');
+            return res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
         }
 
         // Comparar la contraseña ingresada con la almacenada en la base de datos
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(400).send('Usuario o contraseña incorrectos');
+        try {
+            console.log('Contraseña proporcionada:', password);
+            console.log('Hash almacenado:', user.password);
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
+            }
+
+        } catch (err) {
+            console.error('Error al comparar contraseñas', err);
+            return res.status(500).json({ message: 'Error interno al comparar contraseñas', error: err.message });
         }
 
         // Generar un JWT para la sesión
         const token = jwt.sign(
-            {  username: user.name }, // Datos que se incluirán en el token
+            { username: user.name }, // Datos que se incluirán en el token
             process.env.SESSION_SECRET,  
             { expiresIn: '2h' }  
         );
@@ -81,7 +86,7 @@ async function loginUser(req, res) {
         res.status(200).json({ message: 'Inicio de sesión exitoso', token: token });
     } catch (error) {
         console.log('Error al iniciar sesión:', error);
-        res.status(500).send('Hubo un error al iniciar sesión');
+        res.status(500).json({ message: 'Hubo un error al iniciar sesión', error: error.message });
     }
 }
 

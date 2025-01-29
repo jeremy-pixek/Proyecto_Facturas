@@ -30,40 +30,8 @@
     </div>
   </div>
 
-  <script>
-    const loginForm = document.getElementById('loginForm');
-    debugger;
-    loginForm.addEventListener('submit', async (event) => {
-      event.preventDefault();  // Prevenir que el formulario se envíe de forma tradicional
-
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
-      // Enviar datos al backend para login
-      try {
-        debugger;
-        const response =  fetch('/ControlUsuario', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ name: username, password: password })
-        });
-
-        if (response.ok) {
-          const data = response.json();
-          localStorage.setItem('authToken', data.token);  // Guardar el token en localStorage
-          window.location.href = '/inicio.html';  // Redirigir al inicio
-        } else {
-          alert('Error al iniciar sesión');
-        }
-      }
-      catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        alert('Hubo un error en el servidor');
-      }
-    });
-  </script>
+  
+  <script src="scriptLogin.js"></script>
 </body>
 
 </html>
