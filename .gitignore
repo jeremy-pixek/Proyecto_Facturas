@@ -1,9 +1,0 @@
-# Ignorar el archivo .env que contiene datos sensibles
-.env
-
-# Ignorar la carpeta node_modules y sus subcarpetas
-node_modules/
-
-
-
-
