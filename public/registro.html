@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Nuevo usuario</title>
+    <link rel="stylesheet" href="styleRegistro.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notiflix@3.2.0/dist/notiflix-3.2.0.min.css" />
+</head>
+<body>
+    <div class="form-container">
+        <h2>Formulario de Registro</h2>
+        <form id="registerForm">
+            <!-- Campo Nombre -->
+            <div class="input-container">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" required>
+            </div>
+            
+            <!-- Campo Contraseña -->
+            <div class="input-container">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <!-- Verificación de Contraseña -->
+            <div class="input-container">
+                <label for="confirmPassword">Confirmar Contraseña</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <span id="error-message" style="color: red; display: none;">Las contraseñas no coinciden.</span>
+            </div>
+            
+            <!-- Botón de Registro -->
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.0/dist/notiflix-3.2.0.min.js"></script>
+    <script src="scriptRegistro.js"></script>
+
+</body>
+</html>
