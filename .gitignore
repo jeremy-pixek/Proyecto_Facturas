@@ -1,5 +1,0 @@
-# Ignorar .env en cualquier carpeta
-.env
-
-# Ignorar node_modules dentro de backend/
-backend/node_modules/
