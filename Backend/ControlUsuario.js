@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { client } = require('./db');  
+const Notiflix = require('notiflix');
 
 //******************************************* Registrar usuario ******************************************************** */
 async function registerUser(req, res) {
