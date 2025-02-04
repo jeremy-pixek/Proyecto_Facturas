@@ -1,7 +1,11 @@
-/* Estilo general del cuerpo de la página */
+/* Importar fuente moderna */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* Estilo general del cuerpo */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
+    background: url('imagenes/logo.jpeg') no-repeat center center fixed;
+    background-size: cover; /* Hace que la imagen cubra toda la pantalla */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +13,7 @@ body {
     margin: 0;
 }
 
-/* Contenedor principal que centra todo */
+/* Contenedor principal */
 .login-container {
     display: flex;
     justify-content: center;
@@ -18,66 +22,100 @@ body {
     width: 100%;
 }
 
-/* Recuadro del formulario */
+/* Caja del formulario */
 .login-box {
-    background-color: white;
+    background: rgba(255, 255, 255, 0.9); /* Transparencia */
     padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 350px;
     text-align: center;
+    transition: transform 0.3s ease-in-out;
 }
 
-/* Títulos */
+/* Efecto al pasar el mouse */
+.login-box:hover {
+    transform: scale(1.05);
+}
+
+/* Título */
 h2 {
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 26px;
+    font-weight: 600;
     color: #333;
 }
 
 /* Contenedor de los inputs */
 .input-container {
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    text-align: left;
 }
 
 /* Estilo para las etiquetas */
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Inputs */
 input {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px;
+    margin-top: 5px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Efecto al enfocar input */
+input:focus {
+    border-color: #1BFFFF;
+    box-shadow: 0 0 8px rgba(27, 255, 255, 0.5);
 }
 
 /* Botón de iniciar sesión */
 .btn-login {
     width: 100%;
-    padding: 10px;
-    background-color: #4CAF50; /* Verde */
+    padding: 12px;
+    background: linear-gradient(90deg, #2E3192, #1BFFFF);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s;
 }
 
-/* Botón de iniciar sesión (hover) */
+/* Efecto hover del botón */
 .btn-login:hover {
-    background-color: #45a049;
+    background: linear-gradient(90deg, #1BFFFF, #2E3192);
+    transform: scale(1.05);
 }
 
-/* Estilo para el enlace de registro */
+/* Enlace de registro */
 .register-link {
     margin-top: 20px;
 }
 
-.register-link a {
-    text-decoration: none;
-    color: #4CAF50;
-    font-weight: bold;
+.register-link p {
+    font-size: 14px;
+    color: #333;
 }
 
-/* Enlace de registro (hover) */
+.register-link a {
+    text-decoration: none;
+    color: #2E3192;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+/* Efecto hover */
 .register-link a:hover {
+    color: #1BFFFF;
     text-decoration: underline;
 }

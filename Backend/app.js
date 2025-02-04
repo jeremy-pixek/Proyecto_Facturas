@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const ControlUsuario = require('./ControlUsuario');  // Controlador con la lógica del registro
+const ControlUsuario = require('./ControlUsuario');
 const { connectDB } = require('./db');  // Función de conexión a la base de datos
 const dotenv = require('dotenv');  // Para cargar variables de entorno
 
@@ -16,9 +16,9 @@ app.use(express.json());
 // Configuración de express-session para manejar sesiones
 app.use(session({
     secret: process.env.SESSION_SECRET,  // Clave secreta para firmar las sesiones
-    resave: false,                      // No volver a guardar la sesión si no ha cambiado
-    saveUninitialized: true,            // Guardar sesiones que no están inicializadas
-    cookie: { secure: false }           // Si estás usando HTTPS, pon esto en 'true'
+    resave: false,                       // No volver a guardar la sesión si no ha cambiado
+    saveUninitialized: true,             // Guardar sesiones que no están inicializadas
+    cookie: { secure: false }            // Si estás usando HTTPS, pon esto en 'true'
 }));
 
 // Conectar a la base de datos
@@ -28,6 +28,18 @@ connectDB();
 app.post('/backend/registro', ControlUsuario.registerUser);  // Usamos el controlador para manejar el registro
 app.post('/backend/login', ControlUsuario.loginUser); // este es el url que deberias consumir.
 
+app.get('/facturas/:id', async (req, res) => {
+
+    try {
+        const factura = await FacturaModel.findById(req.params.id);
+        res.json(factura);
+
+    } catch (error) {
+        res.status(500).json({ error: 'Factra no encontrada' });
+
+    }
+
+});
 
 
 

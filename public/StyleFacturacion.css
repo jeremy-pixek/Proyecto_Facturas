@@ -1,52 +1,108 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #4A90E2, #1E3A8A);
+    color: #333;
 }
+
 .container {
-    width: 80%;
+    width: 85%;
     margin: auto;
     overflow: hidden;
 }
+
 header {
-    background: #333;
-    color: #fff;
-    padding-top: 30px;
+    background: linear-gradient(45deg, #3498db, #8e44ad);
+    color: white;
+    padding-top: 40px;
     min-height: 70px;
-    border-bottom: #77aaff 3px solid;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-header a {
-    color: #fff;
-    text-decoration: none;
+
+h1 {
+    font-size: 3rem;
+    letter-spacing: 2px;
+    font-weight: bold;
     text-transform: uppercase;
-    font-size: 16px;
 }
+
 .main {
-    padding: 20px;
-    background: #fff;
-    margin-top: 20px;
+    padding: 30px;
+    background: white;
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
 }
+
 .invoice-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
+
+.invoice-header div {
+    width: 45%;
+}
+
+.invoice-header h2 {
+    font-size: 1.2rem;
+    color: #3498db;
+}
+
 .invoice-details {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
+
 .invoice-details table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-.invoice-details th, .invoice-details td {
+
+.invoice-details th,
+.invoice-details td {
+    padding: 12px;
+    text-align: left;
     border: 1px solid #ddd;
-    padding: 8px;
 }
+
 .invoice-details th {
+    background: #1E3A8A;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.invoice-details td {
+    background-color: #fafafa;
+}
+
+.invoice-details tr:nth-child(even) td {
     background-color: #f2f2f2;
 }
+
+.invoice-details td:last-child {
+    text-align: right;
+}
+
 .total {
     text-align: right;
     margin-top: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.invoice-header, .invoice-details, .total {
+    transition: all 0.3s ease;
+}
+
+.invoice-header:hover {
+    transform: scale(1.05);
+}
+
+.invoice-details tbody tr:hover {
+    background-color: #dcdcdc;
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuentas</title>
+    <link rel="stylesheet" href="StyleCuentas.css">
     <!-- <link rel="stylesheet" href=".css"> -->
 </head>
 <body>
@@ -11,6 +12,17 @@
         <h1>Gestión de Cuentas</h1>
     </header>
     <main>
+        <section id="nueva-cuenta">
+            <h2>Agregar Nueva Cuenta</h2>
+            <form>
+                <label for="nombre" style="font-weight: bold;">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+                <label for="saldo" style="font-weight: bold;">Saldo Inicial:</label>
+                <input type="number" id="saldo" name="saldo" required>
+                <button type="submit">Agregar Cuenta</button>
+            </form>
+        </section>
+    
         <section id="cuentas">
             <h2>Lista de Cuentas</h2>
             <table>
@@ -23,21 +35,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    <!-- Contenido dinámico -->
                 </tbody>
             </table>
         </section>
-        <section id="nueva-cuenta">
-            <h2>Agregar Nueva Cuenta</h2>
-            <form>
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
-                <label for="saldo">Saldo Inicial:</label>
-                <input type="number" id="saldo" name="saldo" required>
-                <button type="submit">Agregar Cuenta</button>
-            </form>
-        </section>
     </main>
+    
     <footer>
         
     </footer>
