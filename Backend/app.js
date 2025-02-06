@@ -1,8 +1,8 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const ControlUsuario = require('./ControlUsuario');
-const { connectDB } = require('./db');  // Función de conexión a la base de datos
+const ControlUsuario = require('./Controllers/ControlUsuario');
+const { connectDB } = require('./Config/db');  // Función de conexión a la base de datos
 const dotenv = require('dotenv');  // Para cargar variables de entorno
 
 dotenv.config();  // Cargar las variables de entorno
@@ -40,8 +40,6 @@ app.get('/facturas/:id', async (req, res) => {
     }
 
 });
-
-
 
 // Ruta para iniciar sesión y crear la sesión
 app.post('/login', (req, res) => {
