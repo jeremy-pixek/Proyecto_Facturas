@@ -4,14 +4,28 @@ body {
     padding: 0;
     background: linear-gradient(135deg, #4A90E2, #1E3A8A);
     color: #333;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
 }
-
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1E3A8A;
+    z-index: -1;
+}
 .container {
     width: 85%;
     margin: auto;
     overflow: hidden;
 }
-
+.factura {
+    background-color: white;
+}
 header {
     background: linear-gradient(45deg, #3498db, #8e44ad);
     color: white;
@@ -106,3 +120,57 @@ h1 {
 .invoice-details tbody tr:hover {
     background-color: #dcdcdc;
 }
+
+.factura {
+    width: 60%;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.container-regresar{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+button.button-pdf {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    border-radius: 4px;
+}
+
+button.Regresar {
+    width: 101%;
+    padding: 10px;
+    background: linear-gradient(90deg, #6a6b79, #1BFFFF);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+}
+

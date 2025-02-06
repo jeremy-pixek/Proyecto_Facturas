@@ -58,3 +58,27 @@ h1 {
     font-weight: bold;
     color: #1E3A8A;
 }
+
+.container-Salir{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+button{
+    width: 115%;
+    padding: 18px;
+    background: linear-gradient(90deg, #d80c0c57, #fafafa6e);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #b7bec5, #9da6c4);
+    transform: scale(1.05);
+}

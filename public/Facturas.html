@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="StyleFacturacion.css">
+    <link rel="icon" href="/Imagenes/factura.png" type="image/x-jpeg">
     <title>Reporte de Factura</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-        .factura { width: 60%; margin: auto; padding: 20px; border: 1px solid #ddd; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        button { margin-top: 20px; padding: 10px 15px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+
     </style>
 </head>
+
 <body>
     <div class="factura" id="factura">
         <h2 id="factura-id">Factura #</h2>
@@ -22,7 +21,12 @@
         <p id="fecha">Fecha: </p>
         <table>
             <thead>
-                <tr><th>Descripción</th><th>Cantidad</th><th>Precio</th><th>Total</th></tr>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                </tr>
             </thead>
             <tbody id="detalle-factura"></tbody>
             <tfoot>
@@ -33,55 +37,14 @@
             </tfoot>
         </table>
     </div>
-    <button onclick="generarPDF()">Descargar PDF</button>
+    <button id="button-pdf" onclick="generarPDF()">Descargar PDF</button>
 
-    <script>
-        async function cargarFactura(id) {
-            try {
-                const response = await fetch('http://localhost:5000/factura/${id}');
-                const factura = await response.json();
+    <div class="container-regresar">
+        <button type="button" id="Regresar">Regresar</button>
+    </div>
 
-                document.getElementById("factura-id").textContent = `Factura #${factura._id}`;
-                document.getElementById("cliente").textContent = `Cliente: ${factura.cliente}`;
-                document.getElementById("fecha").textContent = `Fecha: ${factura.fecha}`;
 
-                let total = 0;
-                let detalleHTML = "";
-
-                factura.detalles.forEach(item => {
-                    let subtotal = item.cantidad * item.precio;
-                    total += subtotal;
-                    detalleHTML += `<tr>
-                        <td>${item.descripcion}</td>
-                        <td>${item.cantidad}</td>
-                        <td>$${item.precio.toFixed(2)}</td>
-                        <td>$${subtotal.toFixed(2)}</td>
-                    </tr>`;
-                });
-
-                document.getElementById("detalle-factura").innerHTML = detalleHTML;
-                document.getElementById("total").innerHTML = <strong>$${total.toFixed(2)}</strong>;
-            } catch (error) {
-                console.error("Error al cargar la factura:", error);
-            }
-        }
-
-        function generarPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            html2canvas(document.querySelector("#factura")).then(canvas => {
-                const imgData = canvas.toDataURL("image/png");
-                const imgWidth = 190;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                doc.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-                doc.save("factura.pdf");
-            });
-        }
-
-        // Cargar una factura con un ID específico de MongoDB (reemplázalo con un ID real)
-        cargarFactura("65e4a7f8b28c5e0012345678");
-    </script>
+    <script src="scriptFacturas.js"></script>
 </body>
+
 </html>
