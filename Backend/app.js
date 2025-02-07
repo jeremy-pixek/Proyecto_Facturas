@@ -1,8 +1,10 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const bodyParser = require('body-parser'); // Asegúrate de tener esta importación para bodyParser
 const ControlUsuario = require('./Controllers/ControlUsuario');
-const { connectDB } = require('./Config/db');  // Función de conexión a la base de datos
+const facturaRoutes = require('./routes/FacturaRoutes');
+const { poolTransportedb } = require('../Config/db');  // Asegúrate de que el pool de PostgreSQL esté importado correctamente
 const dotenv = require('dotenv');  // Para cargar variables de entorno
 
 dotenv.config();  // Cargar las variables de entorno
@@ -11,7 +13,9 @@ const app = express();
 const port = 5000;
 
 // Middleware para recibir datos en formato JSON
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // Asegúrate de que bodyParser esté configurado aquí
 
 // Configuración de express-session para manejar sesiones
 app.use(session({
@@ -21,49 +25,84 @@ app.use(session({
     cookie: { secure: false }            // Si estás usando HTTPS, pon esto en 'true'
 }));
 
-// Conectar a la base de datos
-connectDB();
+// Conectar a la base de datos (asegurándote que la función connectDB esté en db.js)
+
+app.use('/api', facturaRoutes);
+
+// Ruta para guardar una factura
+app.post('/guardar-factura', async (req, res) => {
+    const { facturaId, cliente, fecha, producto, cantidad, precio, total } = req.body;
+
+    try {
+        // Guardar los datos en la base de datos usando el pool de conexiones
+        const query = `
+            INSERT INTO transportedb.facturas.cliente (factura_id, cliente, fecha, producto, cantidad, precio, total)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `;
+        const values = [facturaId, cliente, fecha, producto, cantidad, precio, total];
+
+        // Ejecutar la consulta con el pool de conexiones
+        await poolTransportedb.query(query, values);
+        
+        // Responder al frontend
+        res.json({ success: true, message: 'Factura guardada correctamente' });
+    } catch (error) {
+        console.error('Error al guardar la factura:', error);
+        res.json({ success: false, message: 'Error al guardar la factura' });
+    }
+});
+
+app.post('/guardar-factura', async (req, res) => {
+    const { facturaId, cliente, fecha, productos } = req.body;
+
+    if (!facturaId || !cliente || !fecha || !productos || productos.length === 0) {
+        return res.status(400).json({ success: false, message: 'Faltan datos de la factura' });
+    }
+
+    const client = await poolTransportedb.connect();
+
+    try {
+        await client.query('BEGIN');  // Iniciar transacción
+
+        // Guardamos la factura
+        const facturaQuery = `
+            INSERT INTO transportedb.facturas.cliente (factura_id, cliente, fecha)
+            VALUES ($1, $2, $3) RETURNING id;
+        `;
+        const facturaValues = [facturaId, cliente, fecha];
+        const facturaResult = await client.query(facturaQuery, facturaValues);
+        const facturaIdGuardada = facturaResult.rows[0].id;  // Obtener el ID de la factura recién insertada
+
+        // Guardamos los productos de la factura
+        for (const producto of productos) {
+            const productoQuery = `
+                INSERT INTO transportedb.facturas.productoFacturas (factura_id, producto, cantidad, precio, total)
+                VALUES ($1, $2, $3, $4, $5);
+            `;
+            const productoValues = [
+                facturaIdGuardada,  // Referencia a la factura recién insertada
+                producto.producto,
+                producto.cantidad,
+                producto.precio,
+                producto.total
+            ];
+            await client.query(productoQuery, productoValues);
+        }
+
+        await client.query('COMMIT');  // Confirmar la transacción
+        res.status(200).json({ success: true, message: 'Factura guardada correctamente' });
+    } catch (error) {
+        await client.query('ROLLBACK');  // Si algo falla, revertimos la transacción
+        console.error('Error al guardar la factura:', error);
+        res.status(500).json({ success: false, message: 'Error al guardar la factura' });
+    } finally {
+        client.release();  // Liberamos la conexión
+    }
+});
 
 // Ruta para registrar un usuario
 app.post('/backend/registro', ControlUsuario.registerUser);  // Usamos el controlador para manejar el registro
-app.post('/backend/login', ControlUsuario.loginUser); // este es el url que deberias consumir.
-
-app.get('/facturas/:id', async (req, res) => {
-
-    try {
-        const factura = await FacturaModel.findById(req.params.id);
-        res.json(factura);
-
-    } catch (error) {
-        res.status(500).json({ error: 'Factra no encontrada' });
-
-    }
-
-});
-
-// Ruta para iniciar sesión y crear la sesión
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-
-    // Aquí validas el usuario y la contraseña con la base de datos (ejemplo)
-    // Supongamos que la autenticación es correcta:
-    if (username === 'name' && password === 'password') {
-        // Almacenamos el usuario en la sesión
-        req.session.user = { username };
-        res.send('Inicio de sesión exitoso');
-    } else {
-        res.status(401).send('Credenciales incorrectas');
-    }
-});
-
-// Ruta protegida: solo accesible si el usuario está autenticado
-app.get('/inicio', (req, res) => {
-    if (req.session.user) {
-        res.send(`Bienvenido ${req.session.user.username}`);
-    } else {
-        res.status(401).send('No estás autenticado');
-    }
-});
+app.post('/backend/login', ControlUsuario.loginUser); // Este es el URL que deberías consumir.
 
 // Servir los archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, '../public')));

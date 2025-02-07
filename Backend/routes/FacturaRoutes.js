@@ -1,37 +1,12 @@
 const express = require('express');
+const { guardarFactura, generarFacturaPDF } = require('../Controllers/FacturaController'); // Verifica que la ruta sea correcta
+
 const router = express.Router();
-const facturaController = require('/controllers/facturaController');
 
-router.get('/', facturaController.obtenerFacturas);
+// Ruta para guardar la factura
+router.post('/guardar-factura', guardarFactura);
 
-router.get('/:id', facturaController.obtenerFacturaPorId);
-
-router.post('/', facturaController.crearFactura);
-
-router.put('/:id', facturaController.actualizarFactura);
-
-router.delete('/:id', facturaController.eliminarFactura);
-
-router.get('/:id/pdf', facturaController.generarFacturaPDF);
+// Ruta para generar el PDF de la factura
+router.get('/factura/:id/pdf', generarFacturaPDF);  // Asegúrate de que 'generarFacturaPDF' esté definido y exportado en el controlador
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

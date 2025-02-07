@@ -1,176 +1,146 @@
 body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #4A90E2, #1E3A8A);
-    color: #333;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 20px;
-}
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #1E3A8A;
-    z-index: -1;
-}
-.container {
-    width: 85%;
-    margin: auto;
-    overflow: hidden;
-}
-.factura {
-    background-color: white;
-}
-header {
-    background: linear-gradient(45deg, #3498db, #8e44ad);
-    color: white;
-    padding-top: 40px;
-    min-height: 70px;
-    text-align: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    font-size: 3rem;
-    letter-spacing: 2px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.main {
-    padding: 30px;
-    background: white;
-    margin-top: 30px;
-    border-radius: 8px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.invoice-header {
+    font-family: 'Poppins', sans-serif;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #4A90E2, #1E3A8A);
 }
 
-.invoice-header div {
-    width: 45%;
-}
-
-.invoice-header h2 {
-    font-size: 1.2rem;
-    color: #3498db;
-}
-
-.invoice-details {
-    margin-bottom: 30px;
-}
-
-.invoice-details table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.invoice-details th,
-.invoice-details td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
-
-.invoice-details th {
-    background: #1E3A8A;
-    color: white;
-    font-size: 1.1rem;
-}
-
-.invoice-details td {
-    background-color: #fafafa;
-}
-
-.invoice-details tr:nth-child(even) td {
-    background-color: #f2f2f2;
-}
-
-.invoice-details td:last-child {
-    text-align: right;
-}
-
-.total {
-    text-align: right;
-    margin-top: 20px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #e74c3c;
-}
-
-.invoice-header, .invoice-details, .total {
-    transition: all 0.3s ease;
-}
-
-.invoice-header:hover {
-    transform: scale(1.05);
-}
-
-.invoice-details tbody tr:hover {
-    background-color: #dcdcdc;
+.container {
+    max-width: 90%; /* Aumenta el ancho al 90% de la pantalla */
+    width: 900px; /* Establece un ancho mínimo */
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px; /* Aumenta el espacio interno */
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+    position: relative;
 }
 
 .factura {
-    width: 60%;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ddd;
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin-bottom: 20px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-th,
-td {
+th, td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 15px; /* Aumenta el tamaño del padding */
     text-align: left;
+    font-size: 18px; /* Aumenta la fuente */
+    transition: all 0.3s ease;
 }
 
 th {
-    background-color: #f4f4f4;
+    background: #1E3A8A;
+    color: white;
+    font-size: 1.1rem;
+    text-transform: uppercase;
 }
 
-.container-regresar{
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
 }
 
-button.button-pdf {
+tbody tr:hover {
+    background-color: #dcdcdc;
+    transform: scale(1.02);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
     margin-top: 20px;
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    border-radius: 4px;
 }
 
-button.Regresar {
-    width: 101%;
-    padding: 10px;
-    background: linear-gradient(90deg, #6a6b79, #1BFFFF);
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
+.buttons button {
+    padding: 12px 18px;
     border: none;
     border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
+
+#guardar {
+    background: linear-gradient(90deg, #28a745, #218838);
+    color: white;
+}
+
+#guardar:hover {
+    background: linear-gradient(135deg, #34d058, #19692c);
+    transform: scale(1.05);
+}
+
+#button-pdf {
+    background: linear-gradient(90deg, #28a745, #218838);
+    color: white;
+}
+
+#button-pdf:hover {
+    background: linear-gradient(135deg, #34d058, #19692c);
+    transform: scale(1.05);
+}
+
+#Regresar {
+    position: absolute;
+    top: 20px;
+    left: 20px; /* Mueve el botón a la esquina superior izquierda */
+    background: linear-gradient(90deg, #ff9800, #e65100);
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#Regresar:hover {
+    background: linear-gradient(135deg, #ffa726, #bf360c);
+    transform: scale(1.05);
+}
+
+#error-message {
+    font-size: 14px;
+    color: red;
+    margin-top: 5px;
+    text-align: left;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+.formulario {
+    margin-bottom: 20px;
+}
+
+.formulario input {
+    margin: 5px 0;
+    padding: 8px;
+    width: 100%;
+}

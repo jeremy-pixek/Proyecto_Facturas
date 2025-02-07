@@ -1,24 +1,15 @@
-//Contraseñas
-//hyb0vp9hSfg0WDtl
-//7799581-32
+const { Pool } = require('pg');  // Asegúrate de usar 'Pool', que es el constructor para crear una instancia de pool.
 
+const poolTransportedb = new Pool({
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'Jeremy05089',
+    database: 'transportedb'
+});
 
+poolTransportedb.connect()
+    .then(() => console.log("Conectado a la base de datos"))
+    .catch(err => console.log("Error al conectar a la base de datos", err));
 
-const { MongoClient } = require('mongodb');
-require('dotenv').config();
-
-const uri = process.env.MONGODB_URI || "mongodb+srv://JeremyAlexander:7799581-32@cluster0.i3sqc.mongodb.net/";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Conectar a la base de datos
-async function connectDB() {
-    try {
-        await client.connect();
-        console.log('Conexión a MongoDB exitosa');
-    } catch (error) {
-        console.error('Error al conectar con MongoDB:', error);
-    }
-}
-
-// Exportar la función de conexión y el cliente
-module.exports = { connectDB, client };
+module.exports = { poolTransportedb };  // Exporta la instancia para usarla en otros archivos

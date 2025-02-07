@@ -1,8 +1,8 @@
 // Obtener el formulario y los campos
 const registerForm = document.getElementById('registerForm');
-const nameInput = document.getElementById('name');
-const passwordInput = document.getElementById('password');
-const confirmPasswordInput = document.getElementById('confirmPassword');
+const nameInput = document.getElementById('nombre');
+const passwordInput = document.getElementById('contraseña');
+const confirmPasswordInput = document.getElementById('confirmcontraseña');
 const errorMessage = document.getElementById('error-message');
 //esta parte de arriba lo que hace es que busca los elementos que tenes en tu html y lo convierte en variales
 //para acceder a sus propiedades y poder leer lo que tienen o setearle valores
@@ -24,8 +24,8 @@ registerForm.addEventListener('submit', async function (event) {
     }
     // Crear objeto con los datos del formulario
     const userData = {
-        name: nameInput.value,
-        password: passwordInput.value
+        nombre: nameInput.value,
+        contraseña: passwordInput.value
     };
 
     //esta parte se encarga de llamar al backend para consumir los metodos Internos
@@ -42,23 +42,13 @@ registerForm.addEventListener('submit', async function (event) {
         body: JSON.stringify(userData)  // Convertimos el objeto a formato JSON
     });
 
-    if (response.ok){
-        window.location.href = 'login.html';
-    }
-    // Manejar la respuesta del servidor
-    // lo ultimo es que aqui ya con el response, lo que te retorno tu backend podes prosesarlo. 
-    // en teoria es eso. cualquier cosa me avisas.
-    // eso estaba de mas
-    // const responseData = response.json();
-
-    console.log(response);
     if (response.ok) {
-        alert('Usuario registrado exitosamente');
-
-        // Redirigir a otra página o limpiar el formulario
-    }
-
-});
+        // Redirigir a login si el registro fue exitoso
+        window.location.href = 'login.html';
+    } else {
+        const errorData = await response.json();  // Obtenemos los datos del error
+        alert(`Error: ${errorData.message || 'Hubo un problema al registrar el usuario.'}`);
+    }});
 
 // Función para regresar a la pestaña anterior
 const backButton = document.getElementById('button');

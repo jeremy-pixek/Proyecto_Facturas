@@ -9,40 +9,67 @@
     <title>Reporte de Factura</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-
-    </style>
 </head>
 
 <body>
-    <div class="factura" id="factura">
-        <h2 id="factura-id">Factura #</h2>
-        <p id="cliente">Cliente: </p>
-        <p id="fecha">Fecha: </p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Descripción</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="detalle-factura"></tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" style="text-align:right;"><strong>Total:</strong></td>
-                    <td id="total"><strong>$0.00</strong></td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    <button id="button-pdf" onclick="generarPDF()">Descargar PDF</button>
+    <div class="container">
+        <!-- Formulario para ingresar datos -->
+        <div class="formulario">
+            <h2>Ingrese los datos de la factura</h2>
+            <form id="formulario-factura">
+                <label for="factura-id-input">Número de Factura:</label>
+                <input type="text" id="factura-id-input" required>
 
-    <div class="container-regresar">
-        <button type="button" id="Regresar">Regresar</button>
-    </div>
+                <label for="cliente-input">Cliente:</label>
+                <input type="text" id="cliente-input" required>
 
+                <label for="fecha-input">Fecha:</label>
+                <input type="date" id="fecha-input" required>
+
+                <label for="producto-input">Descripción del Producto:</label>
+                <input type="text" id="producto-input" required>
+
+                <label for="cantidad-input">Cantidad:</label>
+                <input type="number" id="cantidad-input" required>
+
+                <label for="precio-input">Precio:</label>
+                <input type="number" step="0.01" id="precio-input" required>
+
+                <button type="button" id="agregar-producto">Agregar Producto</button>
+            </form>
+        </div>
+
+        <!-- Factura generada -->
+        <div class="factura" id="factura">
+            <h2 id="factura-id">Factura #</h2>
+            <p id="cliente">Cliente: </p>
+            <p id="fecha">Fecha: </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="detalle-factura"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align:right;"><strong>Total:</strong></td>
+                        <td id="total"><strong>$0.00</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="buttons">
+            <button type="buttonGuardar" id="guardar">Guardar</button>
+            <button id="button-pdf" onclick="generarPDF()">Descargar PDF</button>
+            <button type="button" id="Regresar">Regresar</button>
+        </div>
+    </div>
 
     <script src="scriptFacturas.js"></script>
 </body>

@@ -1,6 +1,6 @@
 const loginForm = document.getElementById('loginForm');
-const nameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
+const nameInput = document.getElementById('nombre');
+const passwordInput = document.getElementById('contraseña');
 
 
 loginForm.addEventListener('submit', async (event) => {
@@ -8,8 +8,8 @@ loginForm.addEventListener('submit', async (event) => {
 
 
     const DataUser = {
-        name: nameInput.value,
-        password: passwordInput.value
+        nombre: nameInput.value,
+        contraseña: passwordInput.value
     };
     console.log("Datos que estamos enviando:", DataUser);
 
