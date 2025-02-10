@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { poolTransportedb } = require('../Config/db');  // Importa el pool de conexiones
+const { poolTransportedb } = require('C:/Users/TECNOSUM/Desktop/Proyecto/backend/config/db');  // Importa el pool de conexiones
 
 //******************************************* Registrar usuario ******************************************************** */
 async function registerUser(req, res) {

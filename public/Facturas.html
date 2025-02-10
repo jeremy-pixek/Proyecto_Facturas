@@ -17,9 +17,7 @@
         <div class="formulario">
             <h2>Ingrese los datos de la factura</h2>
             <form id="formulario-factura">
-                <label for="factura-id-input">Número de Factura:</label>
-                <input type="text" id="factura-id-input" required>
-
+               
                 <label for="cliente-input">Cliente:</label>
                 <input type="text" id="cliente-input" required>
 
@@ -48,7 +46,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Descripción</th>
+                        <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
                         <th>Total</th>
@@ -65,7 +63,7 @@
         </div>
 
         <div class="buttons">
-            <button type="buttonGuardar" id="guardar">Guardar</button>
+            <button type="button" id="guardar">Guardar</button>
             <button id="button-pdf" onclick="generarPDF()">Descargar PDF</button>
             <button type="button" id="Regresar">Regresar</button>
         </div>
