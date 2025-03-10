@@ -5,10 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser'); // Asegúrate de tener esta importación para bodyParser
 const ControlUsuario = require('./Controllers/ControlUsuario');
 const facturaRoutes = require('./routes/FacturaRoutes');
-console.log(__dirname);
-const { poolTransportedb } = require('C:/Users/TECNOSUM/Desktop/Proyecto/backend/config/db');  // Asegúrate de que el pool de PostgreSQL esté importado correctamente
+const { poolProyecto_Factura } = require('C:/Users/USUARIO/OneDrive/Escritorio/Proyecto_Facturas/Backend/Config/db');  // Asegúrate de que el pool de PostgreSQL esté importado correctamente
 const dotenv = require('dotenv');  // Para cargar variables de entorno
-
 dotenv.config();  // Cargar las variables de entorno
 
 const app = express();
@@ -35,13 +33,13 @@ app.use('/api', facturaRoutes);
 app.post('/guardar-factura', async (req, res) => {
     const { cliente, fecha, productos } = req.body;
 
-    const client = await poolTransportedb.connect();
+    const client = await poolProyecto_Factura.connect();
     try {
         await client.query('BEGIN');
 
         // 1. Insertar la factura (cliente) para generar el factura_id
         const queryCliente = `
-            INSERT INTO transportedb.facturas.cliente (cliente, fecha)
+            INSERT INTO Proyecto_Facturas.facturas.cliente (cliente, fecha)
             VALUES ($1, $2) RETURNING factura_id;
         `;
         const valuesCliente = [cliente, fecha];
@@ -50,7 +48,7 @@ app.post('/guardar-factura', async (req, res) => {
 
         // 2. Insertar los productos en la tabla productosFactura usando el factura_id
         const queryProducto = `
-            INSERT INTO transportedb.facturas.productosFactura (factura_id, producto, cantidad, precio, total)
+            INSERT INTO Proyecto_Facturas.facturas.productosFactura (factura_id, producto, cantidad, precio, total)
             VALUES ($1, $2, $3, $4, $5)
         `;
         
@@ -82,14 +80,14 @@ app.post('/guardar-factura', async (req, res) => {
         return res.status(400).json({ success: false, message: 'Faltan datos de la factura' });
     }
 
-    const client = await poolTransportedb.connect();
+    const client = await poolProyecto_Factura.connect();
 
     try {
         await client.query('BEGIN');  // Iniciar transacción
 
         // Guardamos la factura
         const facturaQuery = `
-            INSERT INTO transportedb.facturas.cliente (factura_id, cliente, fecha)
+            INSERT INTO Proyecto_Facturas.facturas.cliente (factura_id, cliente, fecha)
             VALUES ($1, $2, $3) RETURNING id;
         `;
         const facturaValues = [facturaId, cliente, fecha];
@@ -99,7 +97,7 @@ app.post('/guardar-factura', async (req, res) => {
         // Guardamos los productos de la factura
         for (const producto of productos) {
             const productoQuery = `
-                INSERT INTO transportedb.facturas.productosFactura (factura_id, producto, cantidad, precio, total)
+                INSERT INTO Proyecto_Facturas.facturas.productosFactura (factura_id, producto, cantidad, precio, total)
                 VALUES ($1, $2, $3, $4, $5);
             `;
             const productoValues = [

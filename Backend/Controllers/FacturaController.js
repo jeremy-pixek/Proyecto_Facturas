@@ -1,21 +1,21 @@
 const PDFDocument = require('pdfkit');
-const fs = require('fs');
+// const fs = require('fs');
 const path = require('path');
-const poolTransportedb = require('C:/Users/TECNOSUM/Desktop/Proyecto/backend/config/db');  // Conexión a la base de datos
+const poolProyecto_Factura = require('C:/Users/USUARIO/OneDrive/Escritorio/Proyecto_Facturas/Backend/Config/db');  // Conexión a la base de datos
 
 exports.guardarFactura = async (req, res) => {
-    const { cliente, fecha, productos } = req.body;
+    const { cliente, producto, factura } = req.body;
 
-    const client = await poolTransportedb.connect();
+    const client = await poolProyecto_Factura.connect();
     try {
         await client.query('BEGIN');
 
         // Insertar la factura sin factura_id (autoincrementable)
         const insertFacturaQuery = `
-            INSERT INTO transportedb.facturas.cliente (cliente, fecha)
-            VALUES ($1, $2) RETURNING factura_id;
+            INSERT INTO Proyecto_Facturas.clientes (cliente)
+            VALUES ($1) RETURNING cliente_id;
         `;
-        const insertFacturaValues = [cliente, fecha];
+        const insertFacturaValues = [cliente];
         const insertFacturaResult = await client.query(insertFacturaQuery, insertFacturaValues);
 
         // Recuperamos el factura_id generado
@@ -23,9 +23,9 @@ exports.guardarFactura = async (req, res) => {
         console.log('Factura ID Generada:', facturaIdGuardada);  // Imprimir el ID generado
 
         // Guardar los productos relacionados a esa factura
-        for (const producto of productos) {
+        for (const producto of producto) {
             const insertProductoQuery = `
-                INSERT INTO transportedb.facturas.productosFactura (factura_id, producto, cantidad, precio, total)
+                INSERT INTO facturas.productos (factura_id, producto, cantidad, precio, total)
                 VALUES ($1, $2, $3, $4, $5);
             `;
             const productoValues = [facturaIdGuardada, producto.nombre, producto.cantidad, producto.precio, producto.total];
@@ -49,8 +49,8 @@ exports.guardarFactura = async (req, res) => {
 exports.obtenerFacturaPorId = async (req, res) => {
     const { id } = req.params;
     try {
-        const query = `SELECT * FROM transportedb.facturas.cliente WHERE id = $1`;
-        const result = await poolTransportedb.query(query, [id]);
+        const query = `SELECT * FROM Proyecto_Facturas.facturas.cliente WHERE id = $1`;
+        const result = await poolProyecto_Factura.query(query, [id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ mensaje: "Factura no encontrada" });
         }
@@ -95,8 +95,8 @@ exports.generarFacturaPDF = async (req, res) => {
         const { factura_id } = req.params;
 
         // Consultar la base de datos para obtener los detalles de la factura
-        const facturaQuery = `SELECT * FROM transportedb.facturas.cliente WHERE factura_id = $1`;
-        const facturaResult = await poolTransportedb.query(facturaQuery, [factura_id]);
+        const facturaQuery = `SELECT * FROM Proyecto_Facturas.facturas.cliente WHERE factura_id = $1`;
+        const facturaResult = await poolProyecto_Factura.query(facturaQuery, [factura_id]);
         if (facturaResult.rows.length === 0) {
             return res.status(404).json({ mensaje: "Factura no encontrada" });
         }
@@ -113,8 +113,8 @@ exports.generarFacturaPDF = async (req, res) => {
         doc.fontSize(12).text(`Fecha: ${factura.fecha}`);
 
         // Obtener los productos asociados a la factura
-        const productosQuery = `SELECT * FROM transportedb.facturas.productosFactura WHERE factura_id = $1`;
-        const productosResult = await poolTransportedb.query(productosQuery, [factura.id]);
+        const productosQuery = `SELECT * FROM Proyecto_Facturas.facturas.productosFactura WHERE factura_id = $1`;
+        const productosResult = await poolProyecto_Factura.query(productosQuery, [factura.id]);
 
         doc.text('Productos:', { underline: true });
         productosResult.rows.forEach((producto, index) => {
@@ -122,8 +122,8 @@ exports.generarFacturaPDF = async (req, res) => {
         });
 
         // Calcular el total general
-        const totalFacturaQuery = `SELECT SUM(total) AS total FROM transportedb.facturas.productosFactura WHERE factura_id = $1`;
-        const totalFacturaResult = await poolTransportedb.query(totalFacturaQuery, [factura.id]);
+        const totalFacturaQuery = `SELECT SUM(total) AS total FROM Proyecto_Facturas.facturas.productosFactura WHERE factura_id = $1`;
+        const totalFacturaResult = await poolProyecto_Factura.query(totalFacturaQuery, [factura.id]);
         doc.text(`Total: $${totalFacturaResult.rows[0].total.toFixed(2)}`, { align: 'right' });
 
         doc.end();

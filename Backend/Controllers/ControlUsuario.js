@@ -1,58 +1,85 @@
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { poolTransportedb } = require('C:/Users/TECNOSUM/Desktop/Proyecto/backend/config/db');  // Importa el pool de conexiones
+const { poolProyecto_Factura } = require('C:/Users/USUARIO/OneDrive/Escritorio/Proyecto_Facturas/Backend/Config/db');  // Importa el pool de conexiones
 
 //******************************************* Registrar usuario ******************************************************** */
-async function registerUser(req, res) {
-    const { nombre, contraseña } = req.body;  // Obtener los datos del frontend (nombre y contraseña)
+// Funcion para insertar logs
+
+
+async function logEvent(accion, detalles, estado) {
+    const logQuery = `
+        INSERT INTO Historial.logs (accion, detalles, estado)
+        VALUES ($1, $2, $3)
+    `;
+    const logValues = [accion, detalles, estado];
 
     try {
-        // Verificar si el usuario ya existe
-        const checkUserQuery = 'SELECT * FROM transportedb.login.usuarios WHERE nombre = $1';  // Asegúrate de tener una tabla de usuarios en PostgreSQL
-        const checkUserValues = [nombre];
+        await poolProyecto_Factura.query(logQuery, logValues);
+    } catch (logError) {
+        console.error('Error al registrar log:', logError);
+    }
+}
 
-        const existingUserResult = await poolTransportedb.query(checkUserQuery, checkUserValues);
-
-
-        if (existingUserResult.rows.length > 0) {
-            return res.status(400).send('El usuario ya existe');
-        }
+async function registerUser(req, res) {
+    const { nombre, contraseña } = req.body;  // Obtener los datos del frontend (nombre y contraseña)
+    try {
 
         // Encriptar la contraseña
         const hashedPassword = await bcrypt.hash(contraseña, 10);
 
         // Crear el nuevo usuario
         const insertUserQuery = `
-            INSERT INTO transportedb.login.usuarios (nombre, contraseña)
+            INSERT INTO login.usuarios (nombre, contraseña)
             VALUES ($1, $2)
         `;
-        const insertUserValues = [nombre, hashedPassword];
 
+        const insertUserValues = [nombre, hashedPassword];
         // Insertar el nuevo usuario en la base de datos
-        await poolTransportedb.query(insertUserQuery, insertUserValues);
+        await poolProyecto_Factura.query(insertUserQuery, insertUserValues);
         console.log('Nuevo usuario registrado');
 
-        res.status(201).send('Usuario registrado exitosamente');
+
     } catch (error) {
-        console.error('Error al registrar usuario:', error);
-        res.status(500).send('Hubo un error al registrar el usuario');
+        console.error('Error al registrar usuario:', error.message);
+
+        // Insertar un log de error
+        await logEvent('Registro de usuario', `Nombre: ${nombre}, Error: ${error.message}`, 'fallido');
     }
 }
 
 //****************************************************** Inicio de sesion ****************************************************** */
 
+async function logEvent(accion, detalles, estado) {
+    const logQuery = `
+        INSERT INTO Historial.logs (accion, detalles, estado)
+        VALUES ($1, $2, $3)
+    `;
+    const logValues = [accion, detalles, estado];
+
+    try {
+        // Insertar el log en la base de datos
+        await poolProyecto_Factura.query(logQuery, logValues);
+    } catch (logError) {
+        // Si no se puede insertar el log, imprimir el error
+        console.error('Error al registrar log:', logError);
+    }
+}
+
+
 async function loginUser(req, res) {
-    const { nombre, contraseña } = req.body;  // Obtener los datos del frontend (nombre y contraseña)
+    const { nombre, contraseña } = req.body;  
 
     try {
         // Verificar si el usuario existe
-        const getUserQuery = 'SELECT * FROM transportedb.login.usuarios WHERE nombre = $1';  // Asegúrate de tener una tabla de usuarios en PostgreSQL
+        const getUserQuery = 'SELECT * FROM login.usuarios WHERE nombre = $1';  
         const getUserValues = [nombre];
 
-        const userResult = await poolTransportedb.query(getUserQuery, getUserValues);
+        const userResult = await poolProyecto_Factura.query(getUserQuery, getUserValues);
 
         if (userResult.rows.length === 0) {
+            // Registrar intento de inicio de sesión fallido
+            await logEvent('Intento de inicio de sesión', `Usuario: ${nombre}`, 'fallido');
             return res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
         }
 
@@ -61,13 +88,15 @@ async function loginUser(req, res) {
         // Comparar la contraseña ingresada con la almacenada en la base de datos
         const isPasswordValid = await bcrypt.compare(contraseña, user.contraseña);
         if (!isPasswordValid) {
+            // Registrar intento de inicio de sesión fallido
+            await logEvent('Intento de inicio de sesión', `Usuario: ${nombre}, Contraseña incorrecta`, 'fallido');
             return res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
         }
 
         // Generar un JWT para la sesión
         const token = jwt.sign(
             { nombre: user.nombre }, // Datos que se incluirán en el token
-            process.env.SESSION_SECRET,  
+            process.env.SESSION_SECRET,
             { expiresIn: '2h' }  // Expiración del token
         );
 
@@ -78,5 +107,4 @@ async function loginUser(req, res) {
         res.status(500).json({ message: 'Hubo un error al iniciar sesión', error: error.message });
     }
 }
-
 module.exports = { registerUser, loginUser };
