@@ -25,7 +25,7 @@ app.use(session({
     cookie: { secure: false }            // Si estás usando HTTPS, pon esto en 'true'
 }));
 
-// Conectar a la base de datos (asegurándote que la función connectDB esté en db.js)
+
 
 app.use('/api', facturaRoutes);
 
@@ -128,7 +128,7 @@ app.post('/backend/login', ControlUsuario.loginUser); // Este es el URL que debe
 // Servir los archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Enviar el archivo "index.html" si no se encuentra la ruta específica
+// Enviar el archivo "login.html" si no se encuentra la ruta específica
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/login.html'));
 });

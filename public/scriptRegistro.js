@@ -31,7 +31,7 @@ registerForm.addEventListener('submit', async function (event) {
     //esta parte se encarga de llamar al backend para consumir los metodos Internos
 
     // lo que dibe body es el request que le pasa y que en el backend esta esperando esa informacion
-    //y esto lo que hace es que la respuesta del backend la guarda en un variable llamada response
+    // y esto lo que hace es que la respuesta del backend la guarda en un variable llamada response
     // Enviar datos al servidor usando fetch
 
     const response = await fetch('/backend/registro', {
